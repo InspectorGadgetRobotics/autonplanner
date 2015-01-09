@@ -85,7 +85,15 @@ function parse(config,frames) {
 	var tunableIndex = 0;
 	for(var i = 0; i < components.length; i ++) {
 		var component = components[i];
-		if(component['type'] == 0) {
+		if(component['type'] == 0) {// Major Rework at big spaces
+
+
+
+
+
+
+
+
 			var encoderLeft = parseInt(component['drive-encoder-left']);
 			var encoderRight = parseInt(component['drive-encoder-right']);
 			var sensorNameLeft = encoderLeft<12?'sensorValue[dgtl'+(encoderLeft+1)+']':'nMotorEncoder[port'+(encoderLeft-11)+']';
@@ -119,6 +127,12 @@ function parse(config,frames) {
 			tunableIndex ++;
 		}
 		if(component['type'] == 1) {
+
+
+
+
+
+
 			var encoder = parseInt(component['lift-encoder']);
 			var sensorName = encoder<20?'sensorValue['+(encoder<8?'in'+(encoder+1):'dgtl'+(encoder-7))+']':'nMotorEncoder[port'+(encoder-19)+']';
 			writeLine('\t\terror['+errorIndex+'] = vap_target['+targetIndex+'] - '+sensorName+';');
@@ -193,6 +207,15 @@ function parse(config,frames) {
 						writeLine('\tvap_target['+targetIndex+'] += '+(value/360)+'*vap_ticksPerRotation*vap_ticksPerFoot/12;');
 						writeLine('\tvap_target['+(targetIndex+1)+'] -= '+(value/360)+'*vap_ticksPerRotation*vap_ticksPerFoot/12;');
 					}
+
+
+
+
+
+
+
+
+
 					var encoderLeft = parseInt(realComponent['drive-encoder-left']);
 					var encoderRight = parseInt(realComponent['drive-encoder-right']);
 					var sensorNameLeft = encoderLeft<12?'sensorValue[dgtl'+(encoderLeft+1)+']':'nMotorEncoder[port'+(encoderLeft-11)+']';
@@ -203,6 +226,13 @@ function parse(config,frames) {
 				if(realComponent['type'] == 1) {
 					writeLine('\tvap_target['+targetIndex+'] += '+value+';');
 					var encoder = parseInt(realComponent['lift-encoder']);
+
+
+
+
+
+
+
 					var sensorName = encoder<20?'sensorValue['+(encoder<8?'in'+(encoder+1):'dgtl'+(encoder-7))+']':'nMotorEncoder[port'+(encoder-19)+']';
 					writeLine('\twhile(abs('+sensorName+' - vap_target['+targetIndex+']) > vap_tolerance['+tunableIndex+']);');
 				}
