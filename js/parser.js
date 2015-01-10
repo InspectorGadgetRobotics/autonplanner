@@ -23,6 +23,7 @@ function parse(config,frames) {
 	writeLine('long vap_ticksPerRotation, vap_ticksPerFoot, vap_waitBetweenPID;');
 	writeLine();
 	writeLine('void vap_init() {');
+	writeLine('\timeInitializeAll();');
 	writeLine();
 	for(var i = 0; i < tunable.length; i ++) {
 		var component = tunable[i];
@@ -87,17 +88,24 @@ function parse(config,frames) {
 		var component = components[i];
 		if(component['type'] == 0) {// Major Rework at big spaces
 
-
-
-
-
-
-
-
+			writeLine('\t\tint leftCounts=0;');
+			writeLine('\t\tint rightCounts=0;');
 			var encoderLeft = parseInt(component['drive-encoder-left']);
 			var encoderRight = parseInt(component['drive-encoder-right']);
-			var sensorNameLeft = encoderLeft<12?'sensorValue[dgtl'+(encoderLeft+1)+']':'nMotorEncoder[port'+(encoderLeft-11)+']';
-			var sensorNameRight = encoderRight<12?'sensorValue[dgtl'+(encoderRight+1)+']':'nMotorEncoder[port'+(encoderRight-11)+']';
+			if(encoderLeft<12){
+				writeLine('\t\tencoderGet('+(encoderLeft+1)+',leftCounts);');
+			}else{
+				writeLine('\t\timeGet('+(encoderLeft-12)+',leftCounts);');
+			}
+			if(encoderRight<12){
+				writeLine('\t\tencoderGet('+(encoderRight+1)+',rightCounts);');
+			}else{
+				writeLine('\t\timeGet('+(encoderRight-11)+',rightCounts);');
+			}
+			
+			
+			var sensorNameLeft = 'leftCounts';
+			var sensorNameRight = 'rightCounts';
 			writeLine('\t\terror['+errorIndex+'] = vap_target['+targetIndex+'] - '+sensorNameLeft+';');
 			writeLine('\t\terror['+(errorIndex+1)+'] = vap_target['+(targetIndex+1)+'] - '+sensorNameRight+';');
 			writeLine('\t\tp['+errorIndex+'] = error['+errorIndex+'];');
@@ -127,7 +135,7 @@ function parse(config,frames) {
 			tunableIndex ++;
 		}
 		if(component['type'] == 1) {
-
+			
 
 
 
